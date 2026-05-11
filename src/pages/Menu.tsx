@@ -4,6 +4,7 @@ import Home from './Home';
 import { homeOutline, information, logOutOutline, settingsOutline } from 'ionicons/icons';
 import Page1 from './Page1';
 import Page2 from './Page2';
+import { supabase } from '../lib/supabaseClient';
 
 
 const Menu: React.FC = () => {
@@ -13,11 +14,16 @@ const Menu: React.FC = () => {
     {name:'Page1', url:'/app/page1',icon:information},
     {name:'Page2', url:'/app/page2',icon:settingsOutline}
   ]
+ const handleLogout = async () => {
+  await supabase.auth.signOut();
+  navigation.push('/', 'root', 'replace');
+  }
 
   return (
     <IonPage>
      <IonSplitPane contentId="main">
       <IonMenu contentId="main">
+        {/* Header */}
         <IonHeader>
           <IonToolbar>
             <IonTitle>Menu</IonTitle>
@@ -25,7 +31,8 @@ const Menu: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          
+
+          {/* side menu items */}
           {path.map((item,index) => (
             <IonMenuToggle key={index}>
               <IonItem routerLink={item.url} routerDirection="forward">
@@ -35,7 +42,7 @@ const Menu: React.FC = () => {
             </IonMenuToggle>
           ))}
 
-          <IonButton routerLink="/" routerDirection="back" expand="full">
+          <IonButton routerLink="/" routerDirection="back" expand="full" onClick={handleLogout}>
            <IonIcon icon={logOutOutline} slot="start"></IonIcon>
           Logout
           </IonButton>
